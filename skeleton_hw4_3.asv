@@ -68,36 +68,11 @@ end
 % the snr is maximized
 % ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(2);
-subplot(1,3,1);
-hold on;
-scatter(phi_array,signal_power_array)
-xlabel('Phi');ylabel('Signal Power');
-title('Signal Power versus Phi');
-subplot(1,3,2);
-scatter(phi_array,noise_power_array)
-xlabel('Phi');ylabel('Noise Power');
-title('Noise Power versus Phi');
-subplot(1,3,3);
-scatter(phi_array,snr_array)
-xlabel('Phi');ylabel('SNR');
-title('SNR versus Phi');
-hold off;
-
-max_signal = max(signal_power_array);
-phi_max_signal = phi_array(find(signal_power_array == max_signal));
-fprintf('The value of phi that maximizes the squared distance between the class means of the projected values is');
-disp(phi_max_signal);
-
-min_noise = min(noise_power_array);
-phi_min_noise = phi_array(find(noise_power_array == min_noise));
-fprintf('The value of phi that minimizes the average within-class variance is');
-disp(phi_min_noise);
-
-max_snr = max(snr_array);
-phi_max_snr = phi_array(find(snr_array == max_snr));
-fprintf('The value of phi which maximizes the SNR is ');
-disp(phi_max_snr);
+length(0:pi/48:pi)
+for i = =1:1:length(phi_array)
+figure(2);subplot(phi_array,2,(i*2) - 1);
+scatter(signal_power_array(i),noise_power_array(i))
+%end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
