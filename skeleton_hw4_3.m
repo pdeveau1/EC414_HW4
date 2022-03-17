@@ -98,8 +98,6 @@ max_snr = max(snr_array);
 phi_max_snr = phi_array(find(snr_array == max_snr));
 fprintf('The value of phi which maximizes the SNR is ');
 disp(phi_max_snr);
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % For phi = 0, pi/6, and pi/3, generate plots of estimated class 1 and 
 % class 2 densities of the projections of the feature vectors along 
@@ -110,7 +108,9 @@ disp(phi_max_snr);
 % Insert your script here 
 % ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+for i = [0,pi/6,pi/3]
+    [signal_power, noise_power, snr] = signal_noise_snr(X, Y, i, true);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4.3(c)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -243,6 +243,8 @@ snr = signal/noise;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if want_class_density_plots == true
+    X_projected_phi_class1 = direction'*X1;
+    X_projected_phi_class2 = direction'*X2;
     % Plot density estimates for both classes along chosen direction phi
     figure();
     [pdf1,z1] = ksdensity(X_projected_phi_class1);
