@@ -42,6 +42,7 @@ for i = 1:4
     axis equal;
 end
 
+[X, Y] = two_2D_Gaussians(n1, n2, mu1, mu2, lambda1(2), lambda2(2), theta(2) * pi/6);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4.3(b)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,9 +119,34 @@ end
 % Compute the LDA solution by writing and invoking a function named LDA 
 
 w_LDA = LDA(X,Y);
+fprintf('The wLDA is ');
+disp(w_LDA');
 
+mean_diff = (mu2 - mu1);
+fprintf('The difference between the class mean vectors is ');
+disp(mean_diff');
 % See below for the LDA function which you need to complete.
-
+X1 = X(:, Y==1);
+X2 = X(:, Y==2);
+    
+figure();subplot(1,2,1);
+scatter(X1(1,:),X1(2,:),'o','fill','b');
+grid;axis equal;hold on;
+xlabel('x_1');ylabel('x_2');
+%title(['\theta = ',num2str(theta(i)),'\times \pi/6']);
+scatter(X2(1,:),X2(2,:),'^','fill','r');
+quiver(mu1,w_LDA);
+axis equal;
+hold off;
+subplot(1,2,2);
+scatter(X1(1,:),X1(2,:),'o','fill','b');
+grid;axis equal;hold on;
+xlabel('x_1');ylabel('x_2');
+%title(['\theta = ',num2str(theta(i)),'\times \pi/6']);
+scatter(X2(1,:),X2(2,:),'^','fill','r');
+quiver(mu1,mean_diff);
+axis equal;
+hold off;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Insert code to create a scatter plot and overlay the LDA vector and the 
 % difference between the class means. Use can use Matlab's quiver function 
@@ -267,7 +293,28 @@ function w_LDA = LDA(X, Y)
 % Insert code to compute and return the LDA solution
 % ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+X1 = X(:,find(Y == 1));
+n1 = length(X1);
+X2 = X(:,find(Y == 2));
+n2 = length(X2);
+n = n1 + n2;
+p1 = n1/n;
+p2 = n2/n;
+mux1 = 1/n1 * sum(X1,2);
+sum1 = 0;
+for i = 1:n1
+    sum1 = sum1 + (X1(:,i)-mux1) * (X1(:,i)-mux1)';
+end
+Sx1 = 1/n1 .* sum1;
+mux2 = 1/n2 * sum(X2,2);
+sum2 = 0;
+for i = 1:n2
+    sum2 = sum2 + (X2(:,i)-mux2) * (X2(:,i)-mux2)';
+end
+Sx2 = 1/n2 .* sum2;
+Sxavg = p1*Sx1 + p2*Sx2;
+w = mux2 - mux1;
+w_LDA = inv(Sxavg)*(mux2 - mux1);
 end
 
 function ccr = compute_ccr(X, Y, w_LDA, b)
